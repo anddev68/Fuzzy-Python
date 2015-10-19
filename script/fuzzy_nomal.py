@@ -17,7 +17,7 @@ def zeroVertex(p):
 
 ##	Constants Value
 C = 2	# v length
-N = 100	# x length
+N = 10	# x length
 m = 1.1	# u[i][k] parameter
 P = 2	# Demention
 
@@ -32,7 +32,7 @@ for i in range(N):
 	#x.append(np.array([random.random(),random.random()]))
 	x.append(randomVertex(P))
 	
-# x = sorted(x)
+x = sorted(x,key= lambda x:x[0])
 
 #	Initalize v
 v = []

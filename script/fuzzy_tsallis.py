@@ -9,14 +9,14 @@ import math
 ##
 ##	Constants Value
 ##
-C = 2	# v length
-N = 100	# x length
+C = 3	# v length
+N = 80	# x length
 #q = 2	# u[i][k] parameter
-P = 1	# data demention
+P = 2	# data demention
 e1 = 0.01	# continue condition
 e2 = 0.01 	# continue condition
 Cd = 2.0	# VFA parameter
-Thigh = 200
+Thigh = 20
 
 
 ##
@@ -25,7 +25,7 @@ Thigh = 200
 def randomVertex(p):
 	v = []
 	for i in range(p):
-		v.append(random.random()*4)
+		v.append(random.random())
 	return np.array(v)	
 
 def zeroVertex(p):
@@ -41,8 +41,6 @@ def getError(v1,v2):
 		m = max(score,m)
 	return m
 	
-
-
 
 ##
 ##	Initalize
@@ -114,7 +112,7 @@ while True:
 		#	cal v
 		v[i] = numerator / denominator
 		
-	print "#v=" + str(v)
+	# print "#v=" + str(v)
 	
 	#	compeare solution before 1 step as same temperature
 	#	if Not max_{1<=i<=c}{|vi-v'i|}<=e1
@@ -152,17 +150,32 @@ print "# loop="+str(loop)
 #	print v[i]
 print " #v=" + str(v)
 
-#	print u[i][k]
-for k in range(N):
-	sys.stdout.write(str(x[k][0]))
-	sys.stdout.write(",")
-	sys.stdout.write(str(u[0][k]))
-	sys.stdout.write(",")
-	print u[1][k]
 	
 	
 #	write x to file
-np.savetxt("x.csv",x,delimiter=",")
+#	np.savetxt("x_nomal.csv",x,delimiter=",")
+f = []
+for i in range(C):
+	f.append( open("ts_xy"+str(i)+".csv","w") )
+
+for k in range(N):
+	#	get max of u[i][k] 
+	maxindex = 0
+	maxvalue = 0.0
+	for j in range(0,C):
+		cur = u[j][k]
+		if maxvalue < cur:
+			maxvalue = cur
+			maxindex = j
+	#	write to file, v[k] has biggest value
+	f[maxindex].write(str(x[k][0])+","+str(x[k][1])+"\n")
+	
+
+	
+for i in range(C):
+	f[i].close()
+	
+np.savetxt("ts_u.csv",u,delimiter=",")
 
 
 
