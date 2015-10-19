@@ -1,13 +1,11 @@
 Fuzzy-Python
 =============================
-Fuzzy-c-meansを実行するためのスクリプトです。
-
-
-使い方
------
+Fuzzy-c-meansを実行するためのスクリプトです。  
 以下のライブラリを導入しておいてください。
 * numpy
 
+使い方
+-----
 
 ### script/fuzzy_tsallis.py ###
 Tsallisエントロピー正則化FCM法のサンプルです。  
