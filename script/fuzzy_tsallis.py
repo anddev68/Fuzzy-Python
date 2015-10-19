@@ -9,14 +9,14 @@ import math
 ##
 ##	Constants Value
 ##
-C = 3	# v length
-N = 80	# x length
+C = 4	# v length
+N = 600	# x length
 #q = 2	# u[i][k] parameter
 P = 2	# data demention
 e1 = 0.01	# continue condition
 e2 = 0.01 	# continue condition
 Cd = 2.0	# VFA parameter
-Thigh = 20
+Thigh = 2000
 
 
 ##
@@ -25,7 +25,7 @@ Thigh = 20
 def randomVertex(p):
 	v = []
 	for i in range(p):
-		v.append(random.random())
+		v.append(random.random()*100)
 	return np.array(v)	
 
 def zeroVertex(p):
@@ -56,6 +56,7 @@ v = []
 for j in range(C):
 	#v.append(np.array([random.random(),random.random()]))
 	v.append(randomVertex(P))
+	#v.append(zeroVertex(P))
 
 #	Initalize membership function,u[i][k]
 u = [ [0 for k in range(N)] for i in range(C)]
@@ -80,6 +81,7 @@ while True:
 	q = (Thigh+0.1)/T
 	
 	print "#q="+str(q)
+	print "#T="+str(T)
 	
 	#	Cal u[i][k]
 	beta = 1.0/T
@@ -152,8 +154,7 @@ print " #v=" + str(v)
 
 	
 	
-#	write x to file
-#	np.savetxt("x_nomal.csv",x,delimiter=",")
+#	print data set to tx_xyi.csv
 f = []
 for i in range(C):
 	f.append( open("ts_xy"+str(i)+".csv","w") )
@@ -169,13 +170,29 @@ for k in range(N):
 			maxindex = j
 	#	write to file, v[k] has biggest value
 	f[maxindex].write(str(x[k][0])+","+str(x[k][1])+"\n")
-	
-
-	
+		
 for i in range(C):
 	f[i].close()
-	
+
+#	print v
+np.savetxt("ts_v.csv",v,delimiter=",")
+
+#	print u
 np.savetxt("ts_u.csv",u,delimiter=",")
+
+
+#	print macro
+macro = open("ts_macro.plt","w")
+macro.write("set terminal png\n")
+macro.write("set output 'fuzzy.png'\n")
+macro.write("set datafile separator ','\n")
+macro.write("plot 'ts_xy0.csv' using 1:2 with p lc 3 title 'C0'")
+for i in range (1,C):
+	macro.write(",'ts_xy"+str(i)+".csv' using 1:2 with p lc "+str(i+3)+" title 'C"+str(i)+"'")
+macro.write(",'ts_v.csv' using 1:2 with p lc 2 title 'V'")	
+
+macro.close()
+
 
 
 
