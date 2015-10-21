@@ -69,7 +69,6 @@ T = Thigh
 vdash = copy.deepcopy(v)
 Vdash = copy.deepcopy(v)
 
-print "#v=" + str(v)
 
 ##
 ##	MainLoop
@@ -114,7 +113,7 @@ while True:
 		#	cal v
 		v[i] = numerator / denominator
 		
-	print "#v=" + str(v)
+	#print "#v=" + str(v)
 	
 	#	compeare solution before 1 step as same temperature
 	#	if Not max_{1<=i<=c}{|vi-v'i|}<=e1
