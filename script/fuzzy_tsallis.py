@@ -113,11 +113,7 @@ while True:
 		#	cal v
 		v[i] = numerator / denominator
 		
-<<<<<<< HEAD
-	#print "#v=" + str(v)
-=======
-	# print "#v=" + str(v)
->>>>>>> f385ae69784829f362f9526604ee62b2a92c0284
+
 	
 	#	compeare solution before 1 step as same temperature
 	#	if Not max_{1<=i<=c}{|vi-v'i|}<=e1
