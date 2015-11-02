@@ -3,49 +3,40 @@ import random
 import sys
 import csv
 
-##	vertex Initalize function
 
-def randomVertex(p):
-	v = []
-	for i in range(p):
-		v.append(random.random())
-	return np.array(v)	
+##
+##	Fuzzy c-means 
+##	
+##
 
-def zeroVertex(p):
-	return np.zeros(p)
-	
 
-##	Constants Value
+##
+##	Constans
+##
 C = 2	# v length
-N = 10	# x length
+N = 30	# x length
 m = 1.1	# u[i][k] parameter
 P = 2	# Demention
-
 
 
 ##
 ##	Initalize
 ##
-#	Initalize x
+#	init x
 x = []
 for i in range(N):
-	#x.append(np.array([random.random(),random.random()]))
-	x.append(randomVertex(P))
-	
-x = sorted(x,key= lambda x:x[0])
-
-#	Initalize v
+	x.append(np.random.rand(P))
+#	init v
 v = []
-for j in range(C):
-	#v.append(np.array([random.random(),random.random()]))
-	v.append(randomVertex(P))
-
-#	Initalize membership function,u[i][k]
+for k in range(C):
+	v.append(np.random.rand(P))
+#	init u
 u = [ [0 for k in range(N)] for i in range(C)]
 
 
+
 ##
-##	MainLoop
+##	main loop
 ##
 loop = 0
 Jbefore = float("inf")
@@ -73,12 +64,15 @@ while True:
 			denominator += u[i][k]**m
 		
 		#	cal numerator
-		numerator = zeroVertex(P) #np.array([0.0,0.0])
+		numerator = np.zeros(P)
 		for k in range(N):
 			numerator += (u[i][k] ** m)*x[k]
 		
 		#	cal v
-		v[i] = numerator / denominator
+		num = numerator / denominator
+
+			
+		v[i] = num
 		
 	
 	#	Cal Jfcm, object function
@@ -107,29 +101,46 @@ print "# loop="+str(loop)
 #	print v[i]
 print " #v=" + str(v)
 
-#	print u[i][k]
-for k in range(N):
-	sys.stdout.write(str(x[k][0]))
-	sys.stdout.write(",")
-	sys.stdout.write(str(u[0][k]))
-	sys.stdout.write(",")
-	print u[1][k]
 	
+	
+#	print data set to tx_xyi.csv
+f = []
+for i in range(C):
+	f.append( open("tn_xy"+str(i)+".csv","w") )
 
-#	write x to file
-#	np.savetxt("x_nomal.csv",x,delimiter=",")
-f1 = open("xy1.csv","w")
-f2 = open("xy2.csv","w")
 for k in range(N):
-	if(u[0][k]<u[1][k]):
-		f2.write(str(x[k][0])+","+str(x[k][1])+"\n")	
+	#	get max of u[i][k] 
+	maxindex = 0
+	maxvalue = 0.0
+	for j in range(0,C):
+		cur = u[j][k]
+		if maxvalue < cur:
+			maxvalue = cur
+			maxindex = j
+	#	write to file, v[k] has biggest value
+	f[maxindex].write(str(x[k][0])+","+str(x[k][1])+"\n")
 		
-	else:
-		f1.write(str(x[k][0])+","+str(x[k][1])+"\n")	
+for i in range(C):
+	f[i].close()
 
-	
-f1.close()
-f2.close()
+#	print v
+np.savetxt("tn_v.csv",v,delimiter=",")
+
+#	print u
+np.savetxt("tn_u.csv",u,delimiter=",")
+
+
+#	print macro
+macro = open("tn_macro.plt","w")
+macro.write("set terminal png\n")
+macro.write("set output 'tn_result.png'\n")
+macro.write("set datafile separator ','\n")
+macro.write("plot 'tn_xy0.csv' using 1:2 with p lc 3 title 'C0'")
+for i in range (1,C):
+	macro.write(",'tn_xy"+str(i)+".csv' using 1:2 with p lc "+str(i+3)+" title 'C"+str(i)+"'")
+macro.write(",'tn_v.csv' using 1:2 with p lc 2 title 'V'")	
+
+macro.close()
 	
 
 

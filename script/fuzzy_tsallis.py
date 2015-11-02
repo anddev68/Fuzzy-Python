@@ -1,102 +1,78 @@
+# coding: UTF-8
 
 import numpy as np
 import random
 import sys
 import csv
-import copy
-import math
-
-##
-##	Constants Value
-##
-C = 4	# v length
-N = 600	# x length
-#q = 2	# u[i][k] parameter
-P = 2	# data demention
-e1 = 0.01	# continue condition
-e2 = 0.01 	# continue condition
-Cd = 2.0	# VFA parameter
-Thigh = 2000
 
 
 ##
-##	vertex Initalize function
+##	Fuzzy clustring with Tsallis Entropy
 ##
-def randomVertex(p):
-	v = []
-	for i in range(p):
-		v.append(random.random()*100)
-	return np.array(v)	
 
-def zeroVertex(p):
-	return np.zeros(p)
-	
+
 ##
-##	get error v1,v2
+##	Constans
 ##
-def getError(v1,v2):
-	m = 0.0
-	for i in range(C):
-		score = np.linalg.norm(v1[i]-v2[i])
-		m = max(score,m)
-	return m
-	
+C = 2	# v length
+N = 20	# x length
+#m = 1.1	# u[i][k] parameter
+P = 2	# Demention
+q = 1.1
+T = 20
 
 ##
 ##	Initalize
 ##
-#	Initalize x
+#	init x
 x = []
 for i in range(N):
-	#x.append(np.array([random.random(),random.random()]))
-	x.append(randomVertex(P))
-	
-#	Initalize v
+	if np.random.rand() < 0.5:
+		#x.append(np.random.rand(P))
+		x.append(np.array([0.1+np.random.rand()*0.1,0.1+np.random.rand()*0.1]))
+	else:
+		x.append(np.array([0.7+np.random.rand()*0.1,0.1+np.random.rand()*0.1]))
+		
+#	init v
 v = []
-for j in range(C):
-	#v.append(np.array([random.random(),random.random()]))
-	v.append(randomVertex(P))
-	#v.append(zeroVertex(P))
-
-#	Initalize membership function,u[i][k]
+for k in range(C):
+	v.append(np.random.rand(P))
+#	init u
 u = [ [0 for k in range(N)] for i in range(C)]
 
-# Initalize temperature
-T = Thigh
 
-# Initalize Vdash,vdash
-vdash = copy.deepcopy(v)
-Vdash = copy.deepcopy(v)
+##
+##	初期データ分布の共分散を求める
+##
+sigmaX = 0.0
+sigmaY = 0.0
+
 
 
 ##
-##	MainLoop
+##	main loop
 ##
-loop = -1
+loop = 0
+Jbefore = float("inf")
 while True:
 	loop+=1
 	
-	#	update q
-	q = (Thigh+0.1)/T
+	beta = 20
 	
-	print "#q="+str(q)
-	print "#T="+str(T)
 	
 	#	Cal u[i][k]
-	beta = 1.0/T
-	for k in range(N):
+	for i in range(C):
+		
 		denominator = 0.0
 		for j in range(C):
 			djk = np.linalg.norm(v[j]-x[k])
 			denominator += (1.0-beta*(1.0-q)*djk)**(1.0/(1.0-q))
-		for i in range(C):
+		
+		for k in range(N):
 			dik = np.linalg.norm(v[i]-x[k])
-			numerator = (1.0-beta*(1.0-q)*dik)**(1.0/(1.0-q))
-			u[i][k] = numerator / denominator
+			u[i][k] = (1.0-beta*(1.0-q)*dik)**(1.0/(1.0-q)) / denominator
+		
 	
-	#print "#u="+str(u[0])
-	
-
 	#	Cal v[i]
 	for i in range(C):
 		
@@ -106,39 +82,31 @@ while True:
 			denominator += u[i][k]**q
 		
 		#	cal numerator
-		numerator = zeroVertex(P) #np.array([0.0,0.0])
+		numerator = np.zeros(P)
 		for k in range(N):
 			numerator += (u[i][k] ** q)*x[k]
 		
 		#	cal v
-		v[i] = numerator / denominator
-		
+		num = numerator / denominator
 
+			
+		v[i] = num
+		
 	
-	#	compeare solution before 1 step as same temperature
-	#	if Not max_{1<=i<=c}{|vi-v'i|}<=e1
-	#		then goto loop
-	error = getError(vdash,v)
-	print "#e1-error="+str(error)
-	if (error <=e1) == False:
-		vdash = copy.deepcopy(v)	# save v as same temperature
-		continue
+	#	Cal Jfcm, object function
+	Jfcm = 0.0
+	for k in range(N):
+		for i in range(C):
+			dik = np.linalg.norm(v[i]-x[k])
+			Jfcm += (u[i][k] ** q) * dik  	
 	
-	
-	
-	#	compere solution between before temperature and now temperature
-	#	if max_{1<=i<=c}{|Vi-V'i|<=e2}
-	#		then end loop
-	#	else
-	#		then goto loop and update T
-	error = getError(Vdash,v)
-	print "#e2-error="+str(error)
-	if error<=e2:
+		
+	#	Check continue condition
+	if Jbefore <= Jfcm:
 		break
-	
-	Vdash = copy.deepcopy(v)	#save v as deferent temperature	
-	T = Thigh * math.exp(-Cd*(loop**(1.0/P)))	# update temperature
-	
+		
+	#	update Jbefore
+	Jbefore = Jfcm
 
 
 ##
@@ -156,7 +124,7 @@ print " #v=" + str(v)
 #	print data set to tx_xyi.csv
 f = []
 for i in range(C):
-	f.append( open("ts_xy"+str(i)+".csv","w") )
+	f.append( open("tn_xy"+str(i)+".csv","w") )
 
 for k in range(N):
 	#	get max of u[i][k] 
@@ -174,23 +142,26 @@ for i in range(C):
 	f[i].close()
 
 #	print v
-np.savetxt("ts_v.csv",v,delimiter=",")
+np.savetxt("tn_v.csv",v,delimiter=",")
 
 #	print u
-np.savetxt("ts_u.csv",u,delimiter=",")
+np.savetxt("tn_u.csv",u,delimiter=",")
 
 
 #	print macro
-macro = open("ts_macro.plt","w")
+macro = open("tn_macro.plt","w")
 macro.write("set terminal png\n")
-macro.write("set output 'fuzzy.png'\n")
+macro.write("set xrange [0.0:1.0]\n")
+macro.write("set yrange [0.0:1.0]\n")
+macro.write("set output 'tn_result.png'\n")
 macro.write("set datafile separator ','\n")
-macro.write("plot 'ts_xy0.csv' using 1:2 with p lc 3 title 'C0'")
+macro.write("plot 'tn_xy0.csv' using 1:2 with p lc 3 title 'C0'")
 for i in range (1,C):
-	macro.write(",'ts_xy"+str(i)+".csv' using 1:2 with p lc "+str(i+3)+" title 'C"+str(i)+"'")
-macro.write(",'ts_v.csv' using 1:2 with p lc 2 title 'V'")	
+	macro.write(",'tn_xy"+str(i)+".csv' using 1:2 with p lc "+str(i+3)+" title 'C"+str(i)+"'")
+macro.write(",'tn_v.csv' using 1:2 with p lc 2 title 'V'")	
 
 macro.close()
+	
 
 
 
