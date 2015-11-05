@@ -1,9 +1,12 @@
 # coding: UTF-8
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn import datasets as ds 
+import random
+import math
 
 #	
-#	二次元データをクラスタリングする
+#	Irisのデータを用いてクラスタリングを行う
 #
 
 
@@ -11,26 +14,31 @@ import matplotlib.pyplot as plt
 #	各種パラメータの設定
 #
 C = 2	# v length
-N = 20	# x length
+N = 30	# x length
 P = 2	# Demention
-q = 1.1
-T = 20
+q = 2.5
+Thigh = 0.0000000001
 
+
+#
+#	Irisのデータを用いて初期データを生成
+#	[2:4] 花弁の長さと幅のみ
+#   [1:3]
+iris = ds.load_iris()
+x = iris.data[:,1:3]
+N = len(x)
 
 #
 #	乱数による初期データの生成
 #
-x = np.array( [ np.random.rand(P) for i in range(N) ]) # クラスタ対象のデータ集合
 v = np.array( [ np.random.rand(P) for i in range(C) ]) # クラスタ中心
 u = np.zeros([C,N])
-
-print x
-
 
 #
 #	標準偏差の表示
 #
 print "std="+str(np.std(x))
+
 
 
 ##
@@ -41,7 +49,8 @@ Jbefore = float("inf")
 while True:
 	loop+=1
 	
-	beta = 20
+	T = Thigh * math.exp (-2.0*loop**(1.0/P))
+	beta = 1.0 / T
 	
 	
 	#	Cal u[i][k]
@@ -99,23 +108,33 @@ while True:
 print "v="
 print v
 
+#
+#	ループ回数の表示
+#
+print "loop=" + str(loop)
+
 
 #
-#	u[i][k]ごとにクラスターを抽出
-#	帰属度が最大であるクラスターごとに色分けする
+#	クラスターごとに分けられたプロットデータ
+#	x2[]とy2[]を作成
 #	
+x2 = [ [] for i in range(C)]
+y2 = [ [] for i in range(C)]
+for k in range(N):
+	max_index = np.argmax(u[:,k]) # x[i]が帰属するクラスタの要素番号を取得
+	x2[max_index].append(x[k][1]) # 要素を追加する
+	y2[max_index].append(x[k][0])
+
+
+#
+#	グラフにプロットする
+#
+colors = ['g','r','c','m','y','k','w']
+#plt.axis([0.0,1.0,0.0,1.0])
 for i in range(C):
-	max_index = u[i,:].index(max(u[i,:])) # x[i]が帰属するクラスタの要素番号を取得
-	x2[max_index].append(v[i]) # 要素を追加する
+	plt.plot(x2[i],y2[i],"o",color=colors[i]) 
 	
-
-
-#
-#	グラフ表示
-#
-plt.axis([0.0,1.0,0.0,1.0])
-plt.plot(x[:][:,1],x[:][:,0],"o") # データ集合を二次元平面にプロットする
-plt.plot(v[:][:,1],v[:][:,0],"x") # クラスタ集合を二次元平面にプロットする
+plt.plot(v[:][:,1],v[:][:,0],"x",color='b') # クラスタ集合を二次元平面にプロットする
 plt.show()
 	
 
