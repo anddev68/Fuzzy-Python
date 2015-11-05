@@ -3,12 +3,18 @@ Fuzzy-Python
 Fuzzy-c-meansを実行するためのスクリプトです。  
 以下のライブラリを導入しておいてください。
 * numpy
+* matplotlib
+* scikit-learn
 
 使い方
 -----
 
 ### script/fuzzy_nomal.py ###
 fuzzy-c-meansの動きを確かめるもの。
+
+### script/fuzzy_tsallis_iris.py ###
+Irisのデータを用いてTsallisエントロピー正則化FCM法を試します。 
+実行するとその結果がグラフとなって表示されます。※要ライブラリ
 
 
 ### script/fuzzy_tsallis.py ###
