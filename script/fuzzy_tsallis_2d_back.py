@@ -94,7 +94,7 @@ while True:
 	if Jbefore <= Jfcm:
 		break
 		
-	#	update Jbefore
+f	#	update Jbefore
 	Jbefore = Jfcm
 
 
@@ -103,6 +103,13 @@ while True:
 #
 print "v="
 print v
+
+
+#
+#	ループ回数の表示
+#
+print "loop=" + str(loop)
+
 
 
 #

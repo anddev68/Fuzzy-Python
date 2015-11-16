@@ -13,7 +13,7 @@ Fuzzy-c-meansを実行するためのスクリプトです。
 fuzzy-c-meansの動きを確かめるもの。
 
 ### script/fuzzy_tsallis_iris.py ###
-Irisのデータを用いてTsallisエントロピー正則化FCM法を試します。 
+Irisのデータを用いてTsallisエントロピー正則化FCM法を試します。  
 実行するとその結果がグラフとなって表示されます。※要ライブラリ
 
 

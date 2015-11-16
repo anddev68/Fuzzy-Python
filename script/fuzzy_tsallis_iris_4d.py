@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from sklearn import datasets as ds 
 import random
 import math
+import sys
+from sklearn.metrics import accuracy_score
 
 #	
 #	Irisのデータを用いてクラスタリングを行う
@@ -123,24 +125,58 @@ print "loop=" + str(loop)
 #	クラスターごとに分けられたプロットデータ
 #	x2[]とy2[]を作成
 #	
-x2 = [ [] for i in range(C)]
-y2 = [ [] for i in range(C)]
+#x2 = [ [] for i in range(C)]
+#y2 = [ [] for i in range(C)]
+#for k in range(N):
+#	max_index = np.argmax(u[:,k]) # x[i]が帰属するクラスタの要素番号を取得
+#	x2[max_index].append(x[k][1]) # 要素を追加する
+#	y2[max_index].append(x[k][0])
+
+
+#	帰属するクラスタの番号を保存しておく配列
+#	targetと比較するために作成
+result = np.array( [ np.argmax(u[:,k]) for k in range(N) ] )
+
+#
+#	結果のインデックスがバラバラなので先頭を0にするように変更する
+#	先頭のデータは0へ変更
+#	最後尾のデータは2へ変更
+#	変更をすべてに適用
+first = result[0]
+last = result[N-1]
 for k in range(N):
-	max_index = np.argmax(u[:,k]) # x[i]が帰属するクラスタの要素番号を取得
-	x2[max_index].append(x[k][1]) # 要素を追加する
-	y2[max_index].append(x[k][0])
+	if result[k] == first:
+		result[k] = 0
+	elif result[k] == last:
+		result[k] = 2
+	else:
+		result[k] = 1	
+
+print "target="
+np.savetxt(sys.stdout,target[None],fmt='%.0f',delimiter=' ')
+
+print "result="
+np.savetxt(sys.stdout,result[None],fmt='%.0f',delimiter=' ')
+
+
+#
+#	正答率を表示
+#
+score = accuracy_score(target,result)
+print str(score*100) + "% (" + str(score*N) + "/" + str(N) + ")"
+
 
 
 #
 #	グラフにプロットする
 #
-colors = ['g','r','c','m','y','k','w']
+#colors = ['g','r','c','m','y','k','w']
 #plt.axis([0.0,1.0,0.0,1.0])
-for i in range(C):
-	plt.plot(x2[i],y2[i],"o",color=colors[i]) 
+#for i in range(C):
+#	plt.plot(x2[i],y2[i],"o",color=colors[i]) 
 	
-plt.plot(v[:][:,1],v[:][:,0],"x",color='b') # クラスタ集合を二次元平面にプロットする
-plt.show()
+#plt.plot(v[:][:,1],v[:][:,0],"x",color='b') # クラスタ集合を二次元平面にプロットする
+#plt.show()
 	
 
 

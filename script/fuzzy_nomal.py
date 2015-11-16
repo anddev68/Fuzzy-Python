@@ -34,7 +34,6 @@ for k in range(C):
 u = [ [0 for k in range(N)] for i in range(C)]
 
 
-
 ##
 ##	main loop
 ##
@@ -117,8 +116,10 @@ for k in range(N):
 		if maxvalue < cur:
 			maxvalue = cur
 			maxindex = j
+			
 	#	write to file, v[k] has biggest value
 	f[maxindex].write(str(x[k][0])+","+str(x[k][1])+"\n")
+		
 		
 for i in range(C):
 	f[i].close()
