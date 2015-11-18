@@ -90,13 +90,12 @@ def fcm(x,P,N,C,Thigh):
     # ループを更新する
     loop+=1
     # 温度を更新する
-	  T = Thigh * math.exp (-2.0*loop**(1.0/P))  
-	  beta = 1.0 / T
-	  
-	  
-	  #	--- Cal u[i][k] ---
-	  # ここの部分はデバッグ済み。触らない。
-	  for k in range(N):
+    T = Thigh * math.exp (-2.0*loop**(1.0/P))  
+    beta = 1.0 / T
+    
+    #	--- Cal u[i][k] ---
+    # ここの部分はデバッグ済み。触らない。
+    for k in range(N):
 		
 		  denominator = 0.0
 		  for j in range(C):
@@ -106,10 +105,10 @@ def fcm(x,P,N,C,Thigh):
 		  for i in range(C):
 			  dik = np.linalg.norm(v[i]-x[k])
 			  u[i][k] = (1.0-beta*(1.0-q)*dik)**(1.0/(1.0-q)) / denominator
-	  
-	  #	--- Cal v[i] ---
-	  # ここの部分はデバッグ済み。触らない。
-	  for i in range(C):
+		
+    #	--- Cal v[i] ---
+    # ここの部分はデバッグ済み。触らない。
+    for i in range(C):
 		
 		  #	cal denominator
 		  denominator = 0.0
