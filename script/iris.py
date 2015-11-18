@@ -13,51 +13,6 @@ import sys
 #
 
 
-#
-# グローバル変数宣言
-#
-iris = ds.load_iris() # Irisのデータをロードする
-data = iris.data  # Irisの4次元データ(150個)
-target = iris.target  # 正解 [0,0,0,1....]
-
-
-# 標準偏差を表示する
-# print "std="+str(np.std(x))
-
-
-#
-#	各種パラメータの設定
-#
-C = 3	# v length
-N = 150	# x length
-P = 4	# Demention
-q = 2.5
-Thigh = 0.0000000001
-
-
-#
-# エントリーポイント
-#
-
-# fcmで求める 
-result = fcm(data,P,N,C,Thigh)
-predict = result[0]
-loop = result[1]
-
-# 正解とpredictを表示
-print "target="
-np.savetxt(sys.stdout,g_target[None],fmt='%.0f',delimiter=' ')
-
-print "predict="
-np.savetxt(sys.stdout,predict[None],fmt='%.0f',delimiter=' ')
-
-#	正答率を表示
-score = accuracy_score(g_target,predict)
-print str(score*100) + "% (" + str(score*N) + "/" + str(N) + ")"
-
-#	ループ回数の表示
-print "loop=" + str(loop)
-
 
 #
 # fuzzy_clustring_method
@@ -143,3 +98,62 @@ def fcm(x,P,N,C,Thigh):
 		  result[k] = 1	
 
   return [predict,loop]
+
+
+
+
+
+
+
+
+
+
+
+
+#
+# グローバル変数宣言
+#
+iris = ds.load_iris() # Irisのデータをロードする
+data = iris.data  # Irisの4次元データ(150個)
+target = iris.target  # 正解 [0,0,0,1....]
+
+
+# 標準偏差を表示する
+# print "std="+str(np.std(x))
+
+
+#
+#	各種パラメータの設定
+#
+C = 3	# v length
+N = 150	# x length
+P = 4	# Demention
+q = 2.5
+Thigh = 0.0000000001
+
+
+#
+# エントリーポイント
+#
+
+# fcmで求める 
+result = fcm(data,P,N,C,Thigh)
+predict = result[0]
+loop = result[1]
+
+# 正解とpredictを表示
+print "target="
+np.savetxt(sys.stdout,g_target[None],fmt='%.0f',delimiter=' ')
+
+print "predict="
+np.savetxt(sys.stdout,predict[None],fmt='%.0f',delimiter=' ')
+
+#	正答率を表示
+score = accuracy_score(g_target,predict)
+print str(score*100) + "% (" + str(score*N) + "/" + str(N) + ")"
+
+#	ループ回数の表示
+print "loop=" + str(loop)
+
+
+
