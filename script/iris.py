@@ -40,7 +40,7 @@ Thigh = 0.0000000001
 #
 
 # fcmで求める 
-result = fcm(g_data)
+result = fcm(g_data,P,N,C,Thigh)
 predict = result[0]
 loop = result[1]
 
