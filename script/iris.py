@@ -129,12 +129,12 @@ def fcm(x,P,N,C,Thigh):
   first = predict[0]
   last = predict[N-1]
   for k in range(N):
-	  if result[k] == first:
-		  result[k] = 0
-	  elif result[k] == last:
-		  result[k] = 2
+	  if predict[k] == first:
+		  predict[k] = 0
+	  elif predict[k] == last:
+		  predict[k] = 2
 	  else:
-		  result[k] = 1	
+		  predict[k] = 1	
 
   return [predict,loop]
 
