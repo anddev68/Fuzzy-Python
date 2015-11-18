@@ -16,9 +16,9 @@ import sys
 #
 # グローバル変数宣言
 #
-g_iris = ds.load_iris() # Irisのデータをロードする
-g_data = iris.data  # Irisの4次元データ(150個)
-g_target = iris.target  # 正解 [0,0,0,1....]
+iris = ds.load_iris() # Irisのデータをロードする
+data = iris.data  # Irisの4次元データ(150個)
+target = iris.target  # 正解 [0,0,0,1....]
 
 
 # 標準偏差を表示する
@@ -40,7 +40,7 @@ Thigh = 0.0000000001
 #
 
 # fcmで求める 
-result = fcm(g_data,P,N,C,Thigh)
+result = fcm(data,P,N,C,Thigh)
 predict = result[0]
 loop = result[1]
 
