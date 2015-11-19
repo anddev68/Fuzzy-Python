@@ -144,15 +144,14 @@ def fcm(x,P,N,C,Thigh,q):
     #	--- Cal u[i][k] ---
     # ここの部分はデバッグ済み。触らない。
     for k in range(N):
-		
-		  denominator = 0.0
-		  for j in range(C):
-			  djk = np.linalg.norm(v[j]-x[k])
-			  denominator += (1.0-beta*(1.0-q)*djk)**(1.0/(1.0-q))
-		
-		  for i in range(C):
-			  dik = np.linalg.norm(v[i]-x[k])
-			  u[i][k] = (1.0-beta*(1.0-q)*dik)**(1.0/(1.0-q)) / denominator
+      denominator = 0.0
+      for j in range(C):
+        djk = np.linalg.norm(v[j]-x[k])
+        denominator += (1.0-beta*(1.0-q)*djk)**(1.0/(1.0-q))
+			  
+      for i in range(C):
+        dik = np.linalg.norm(v[i]-x[k])
+        u[i][k] = (1.0-beta*(1.0-q)*dik)**(1.0/(1.0-q)) / denominator
 		
     #	--- Cal v[i] ---
     # ここの部分はデバッグ済み。触らない。
@@ -167,7 +166,7 @@ def fcm(x,P,N,C,Thigh,q):
       numerator = np.zeros(P)
       for k in range(N):
         numerator += (u[i][k] ** q)*x[k]
-        
+  
       #	cal v
       num = numerator / denominator
       v[i] = num
