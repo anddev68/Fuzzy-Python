@@ -128,6 +128,7 @@ def fcm(x,P,N,C,Thigh,q):
   # 前温度での最適解を初期化する
   Vdash = copy.deepcopy(v)  
   
+  vdash = copy.deepcopy(v)
   
   # ループ開始
   loop = 0
