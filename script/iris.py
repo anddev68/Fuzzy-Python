@@ -186,11 +186,12 @@ def fcm(x,P,N,C,Thigh,q):
     if tmp < score:
       score = tmp
       V = copy.deepcopy(v)
+    print tmp
     
     if distance(v,vdash) < e1:
       # 同一温度で収束した場合
       
-      print distance(V,Vdash) 
+      # print distance(V,Vdash) 
       
       if distance(V,Vdash) < e2:
         # 異なる温度で最適解が収束した場合
@@ -203,8 +204,8 @@ def fcm(x,P,N,C,Thigh,q):
       # Vdashを更新する
       Vdash = copy.deepcopy(V)
       
-      # vdashを更新してループする
-      vdash = copy.deepcopy(v)
+    # vdashを更新してループする
+    vdash = copy.deepcopy(v)
     
     
   # loop end
