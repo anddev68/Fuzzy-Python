@@ -12,6 +12,7 @@ from sklearn.metrics import accuracy_score
 import random
 import math
 import sys
+import copy
 
 
 def main():
@@ -53,6 +54,34 @@ def main():
 
 
 
+#
+# 収束判定のための移動度を求める関数
+# @param v1
+# @param v2
+#
+def distance(v1,v2):
+  max = 0.0
+  for i in range(len(v1)):
+    score = np.linalg.norm(v1[i]-v2[i])
+    if max > score:
+      score = max
+  return max
+
+#
+# 目的関数Jfcm
+# この関数を最小化するのが目的
+# @param u
+# @param x
+# @param v
+# @param q
+def jfcm(u,x,v,q):
+	score = 0.0
+	for k in range(len(x)):
+		for i in range(len(v)):
+			dik = np.linalg.norm(v[i]-x[k])
+			score += (u[i][k] ** q) * dik  	
+	return score
+
 
 #
 # fuzzy_clustring_method
@@ -88,12 +117,24 @@ def fcm(x,P,N,C,Thigh,q):
   # 帰属度関数を初期化する
   u = np.zeros([C,N])
   
+  
+  # 現温度での最適解を初期化する
+  V = copy.deepcopy(v)
+  score = jfcm(u,x,v,q)
+  
+  
+  # 前温度での最適解を初期化する
+  Vdash = copy.deepcopy(v)  
+  
+  
   # ループ開始
   loop = 0
   update_temperature = 0
   while True:
+    
     # ループを更新する
     loop+=1
+    
     # 温度を更新する
     T = Thigh * math.exp (-2.0*loop**(1.0/P))  
     beta = 1.0 / T
@@ -129,7 +170,19 @@ def fcm(x,P,N,C,Thigh,q):
 		  num = numerator / denominator
 		  v[i] = num
 		  
-    # 収束判定を行う  
+    # 収束判定1
+    # クラスタ中心の移動(同一q値との比較)がe1以上ならstep3へ戻る
+    if distance(v,vdash) > e1:
+      continue  
+      
+    
+    # 収束判定2
+    # クラスタ中心の移動(前q値との比較)がe2以上ならstep3へ戻る
+    # ※ここで比較するのは最適解である  
+    if distance(v,vdash
+    
+    
+    
     break 
   
   
@@ -141,15 +194,5 @@ def fcm(x,P,N,C,Thigh,q):
   last = predict[N-1]
   for k in range(N):
 	  if predict[k] == first:
-		  predict[k] = 0
-	  elif predict[k] == last:
-		  predict[k] = 2
-	  else:
-		  predict[k] = 1	
-
-  return [predict,loop]
-
-
-# ---
-main()
-
+		  predict[k] = 
+	  elif predict[k] == last
