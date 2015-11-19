@@ -112,7 +112,7 @@ def jfcm(u,x,v,q):
 def fcm(x,P,N,C,Thigh,q):
 
   e1 = 0.01
-  e2 = 0.01
+  e2 = 0.00001
 
   # クラスタ中心を初期化する
   v = np.array( [ np.random.rand(P) for i in range(C) ]) 
