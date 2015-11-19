@@ -178,7 +178,7 @@ def fcm(x,P,N,C,Thigh,q):
     if distance(v,vdash) < e1:
       # 同一温度で収束した場合
       
-      if distance(V,Vdash) < e2
+      if distance(V,Vdash) < e2:
         # 異なる温度で最適解が収束した場合
         # クラスタリングを終了する
         break
