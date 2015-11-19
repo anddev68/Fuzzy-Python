@@ -203,8 +203,8 @@ def fcm(x,P,N,C,Thigh,q):
       # Vdashを更新する
       Vdash = copy.deepcopy(V)
       
-    # vdashを更新してループする
-    vdash = copy.deepcopy(v)
+      # vdashを更新してループする
+      vdash = copy.deepcopy(v)
     
     
   # loop end
