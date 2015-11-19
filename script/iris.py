@@ -39,13 +39,13 @@ def main():
 
   # 正解とpredictを表示
   print "target="
-  np.savetxt(sys.stdout,g_target[None],fmt='%.0f',delimiter=' ')
+  np.savetxt(sys.stdout,target[None],fmt='%.0f',delimiter=' ')
 
   print "predict="
   np.savetxt(sys.stdout,predict[None],fmt='%.0f',delimiter=' ')
 
   #	正答率を表示
-  score = accuracy_score(g_target,predict)
+  score = accuracy_score(target,predict)
   print str(score*100) + "% (" + str(score*N) + "/" + str(N) + ")"
 
   #	ループ回数の表示
