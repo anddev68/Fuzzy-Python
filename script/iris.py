@@ -153,7 +153,7 @@ def fcm(x,P,N,C,Thigh,q):
       for i in range(C):
         dik = np.linalg.norm(v[i]-x[k])
         u[i][k] = (1.0-beta*(1.0-q)*dik)**(1.0/(1.0-q)) / denominator
-		
+        
     #	--- Cal v[i] ---
     # ここの部分はデバッグ済み。触らない。
     for i in range(C):
@@ -178,8 +178,7 @@ def fcm(x,P,N,C,Thigh,q):
     print "v="
     print v
     
-    print distance(v,vdash)
-		  
+    
 		# --- 収束チェック ---
 		
     # 最適解を更新する
@@ -188,9 +187,10 @@ def fcm(x,P,N,C,Thigh,q):
       score = tmp
       V = copy.deepcopy(v)
     
-    
     if distance(v,vdash) < e1:
       # 同一温度で収束した場合
+      
+      print distance(V,Vdash) 
       
       if distance(V,Vdash) < e2:
         # 異なる温度で最適解が収束した場合
