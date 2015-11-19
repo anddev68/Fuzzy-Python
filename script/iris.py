@@ -170,8 +170,13 @@ def fcm(x,P,N,C,Thigh,q):
       #	cal v
       num = numerator / denominator
       v[i] = num
-		
-		
+      
+      
+      print "vdash="
+      print vdash
+      print "v="
+      print v
+		  
 		# --- 収束チェック ---
 		
     if distance(v,vdash) < e1:
