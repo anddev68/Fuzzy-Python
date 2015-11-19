@@ -30,7 +30,7 @@ def main():
   N = 150	# x length
   P = 4	# Demention
   Thigh = 20
-  q = 1.1
+  q = 2.0
 
 
   # fcmで求める 
