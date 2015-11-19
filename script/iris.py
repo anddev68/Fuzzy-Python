@@ -119,7 +119,7 @@ def fcm(x,P,N,C,Thigh,q):
   
   # 帰属度関数を初期化する
   u = np.zeros([C,N])
-  
+  u *= 10
   
   # 現温度での最適解を初期化する
   V = copy.deepcopy(v)
