@@ -64,7 +64,7 @@ def distance(v1,v2):
   for i in range(len(v1)):
     score = np.linalg.norm(v1[i]-v2[i])
     if max > score:
-      score = max
+      max = score
   return max
 
 #
@@ -127,7 +127,6 @@ def fcm(x,P,N,C,Thigh,q):
   
   # 前温度での最適解を初期化する
   Vdash = copy.deepcopy(v)  
-  
   vdash = copy.deepcopy(v)
   
   # ループ開始
