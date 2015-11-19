@@ -122,7 +122,6 @@ def fcm(x,P,N,C,Thigh,q):
   V = copy.deepcopy(v)
   score = jfcm(u,x,v,q)
   
-  
   # 前温度での最適解を初期化する
   Vdash = copy.deepcopy(v)  
   
@@ -174,6 +173,9 @@ def fcm(x,P,N,C,Thigh,q):
     # クラスタ中心の移動(同一q値との比較)がe1以上ならstep3へ戻る
     if distance(v,vdash) > e1:
       continue  
+    
+    # 最適解を更新
+    Vdash = copy.deepcopy(V)
       
     
     # 収束判定2
@@ -193,6 +195,4 @@ def fcm(x,P,N,C,Thigh,q):
   first = predict[0]
   last = predict[N-1]
   for k in range(N):
-	  if predict[k] == first:
-		  predict[k] = 
-	  elif predict[k] == last
+	  if predict[k] == fir
