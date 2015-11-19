@@ -180,8 +180,9 @@ def fcm(x,P,N,C,Thigh,q):
     
     # 収束判定2
     # クラスタ中心の移動(前q値との比較)がe2以上ならstep3へ戻る
-    # ※ここで比較するのは最適解である  
-    if distance(v,vdash
+    # ※ここで比較するのは最適解で
+    if distance(v,Vdash):
+      
     
     
     
@@ -195,4 +196,15 @@ def fcm(x,P,N,C,Thigh,q):
   first = predict[0]
   last = predict[N-1]
   for k in range(N):
-	  if predict[k] == fir
+	  if predict[k] == first:
+		  predict[k] = 0
+	  elif predict[k] == last:
+		  predict[k] = 2
+	  else:
+		  predict[k] = 1	
+
+  return [predict,loop]
+  
+  
+  
+  
