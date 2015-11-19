@@ -63,7 +63,6 @@ def distance(v1,v2):
   max = 0.0
   for i in range(len(v1)):
     score = np.linalg.norm(v1[i]-v2[i])
-    print score
     if max < score:
       max = score
   return max
