@@ -171,7 +171,6 @@ def fcm(x,P,N,C,Thigh,q):
       num = numerator / denominator
       v[i] = num
 		
-
 		
 		# --- 収束チェック ---
 		
@@ -221,28 +220,6 @@ def fcm(x,P,N,C,Thigh,q):
   
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# ---
+main()
 
