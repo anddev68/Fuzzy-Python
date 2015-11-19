@@ -157,20 +157,20 @@ def fcm(x,P,N,C,Thigh,q):
     #	--- Cal v[i] ---
     # ここの部分はデバッグ済み。触らない。
     for i in range(C):
-		
-		  #	cal denominator
-		  denominator = 0.0
-		  for k in range(N):
-			  denominator += u[i][k]**q
-		
-		  #	cal numerator
-		  numerator = np.zeros(P)
-		  for k in range(N):
-			  numerator += (u[i][k] ** q)*x[k]
-		
-		  #	cal v
-		  num = numerator / denominator
-		  v[i] = num
+      
+      #	cal denominator
+      denominator = 0.0
+      for k in range(N):
+        denominator += u[i][k]**q
+        
+      #	cal numerator
+      numerator = np.zeros(P)
+      for k in range(N):
+        numerator += (u[i][k] ** q)*x[k]
+        
+      #	cal v
+      num = numerator / denominator
+      v[i] = num
 		
 		print "v="
 		print v
