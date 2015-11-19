@@ -182,7 +182,7 @@ def fcm(x,P,N,C,Thigh,q):
     vdash = None
     
     # 最適解のクリア
-    score = inf
+    score = float("inf")
     V = None
     
     #
