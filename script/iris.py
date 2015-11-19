@@ -29,7 +29,7 @@ def main():
   C = 3	# v length
   N = 150	# x length
   P = 4	# Demention
-  Thigh = 0.00001
+  Thigh = 0.0000001
   q = 1.1
 
 
