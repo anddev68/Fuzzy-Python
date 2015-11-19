@@ -177,6 +177,8 @@ def fcm(x,P,N,C,Thigh,q):
     print "v="
     print v
 		  
+	  print distance(v,vdash)
+		  
 		# --- 収束チェック ---
 		
     if distance(v,vdash) < e1:
