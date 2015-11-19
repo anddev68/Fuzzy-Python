@@ -29,10 +29,11 @@ def main():
   N = 150	# x length
   P = 4	# Demention
   Thigh = 0.0000000001
+  q = 1.1
 
 
   # fcmで求める 
-  result = fcm(data,P,N,C,Thigh)
+  result = fcm(data,P,N,C,Thigh,q)
   predict = result[0]
   loop = result[1]
 
@@ -59,17 +60,27 @@ def main():
 #
 # 1.クラスタ中心vをランダムに決定する
 # 2.帰属度関数uをゼロクリアする
-# 3.以下の操作を終了条件を満たすまで繰り返す
+# 3.以下の操作を繰り返す
+# 3-1.ループ回数を更新する
+# 3-2.温度を更新する
+# 3-3.uを更新する
+# 3-4.vを更新する
+# 3-5.終了条件を判定
+# 4.クラスタリング結果をpredictに保存する
+# 5.ラベルを先頭が0,後ろが2になるように再配置する
+# 6.[predict,loop]を返す
+#
 # @param x データ集合
 # @param P データの次元数
 # @param N データ集合の個数
 # @param C クラスタ中心の数
 # @param Thigh 初期温度
-# @return [loop,predict]
+# @param q q値
+# @return [predict,loop]
 #   loop:ループ回数
 #   predict:クラスタリング結果
 #
-def fcm(x,P,N,C,Thigh):
+def fcm(x,P,N,C,Thigh,q):
 
   # クラスタ中心を初期化する
   v = np.array( [ np.random.rand(P) for i in range(C) ]) 
