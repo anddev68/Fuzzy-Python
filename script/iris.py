@@ -29,7 +29,7 @@ def main():
   C = 3	# v length
   N = 150	# x length
   P = 4	# Demention
-  Thigh = 0.0000000001
+  Thigh = 20
   q = 1.1
 
 
@@ -120,7 +120,7 @@ def fcm(x,P,N,C,Thigh,q):
   
   # 現温度での最適解を初期化する
   V = copy.deepcopy(v)
-  score = jfcm(u,x,v,q)
+  score = float("inf")
   
   # 前温度での最適解を初期化する
   Vdash = copy.deepcopy(v)  
@@ -135,7 +135,7 @@ def fcm(x,P,N,C,Thigh,q):
     loop+=1
     
     # 温度を更新する
-    T = Thigh * math.exp (-2.0*loop**(1.0/P))  
+    T = Thigh * math.exp (-2.0*update_temperature**(1.0/P))  
     beta = 1.0 / T
     
     #	--- Cal u[i][k] ---
@@ -168,25 +168,35 @@ def fcm(x,P,N,C,Thigh,q):
 		  #	cal v
 		  num = numerator / denominator
 		  v[i] = num
+		
 		  
-    # 収束判定1
-    # クラスタ中心の移動(同一q値との比較)がe1以上ならstep3へ戻る
-    if distance(v,vdash) > e1:
-      continue  
-    
-    # 最適解を更新
-    Vdash = copy.deepcopy(V)
+		# --- 収束チェック ---
+		
+    if distance(v,vdash) < e1:
+      # 同一温度で収束した場合
       
-    
-    # 収束判定2
-    # クラスタ中心の移動(前q値との比較)がe2以上ならstep3へ戻る
-    # ※ここで比較するのは最適解で
-    if distance(v,Vdash):
+      if distance(V,Vdash) < e2
+        # 異なる温度で最適解が収束した場合
+        # クラスタリングを終了する
+        break
       
+      # 温度を更新する
+      update_temperature +=1
+      
+      # Vdashを更新する
+      Vdash = copy.deepcopy(V)
+      
+    # 最適解を更新する
+    tmp = jfcm(u,x,v,q)
+    if tmp < score:
+      score = tmp
+      V = copy.deepcopy(v)
+    
+    # vdashを更新してループする
+    vdash = copy.deepcopy(v)
     
     
-    
-    break 
+  # loop end
   
   
   # クラスタリング結果を取得
@@ -206,5 +216,30 @@ def fcm(x,P,N,C,Thigh,q):
   return [predict,loop]
   
   
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
