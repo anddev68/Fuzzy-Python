@@ -200,6 +200,7 @@ def fcm(x,P,N,C,Thigh,q):
       
       # 温度を更新する
       update_temperature +=1
+      print "update temperature"
       
       # Vdashを更新する
       Vdash = copy.deepcopy(V)
