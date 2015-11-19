@@ -176,8 +176,8 @@ def fcm(x,P,N,C,Thigh,q):
     print vdash
     print "v="
     print v
-		  
-		print distance(v,vdash)
+    
+    print distance(v,vdash)
 		  
 		# --- 収束チェック ---
 		
