@@ -186,7 +186,8 @@ def fcm(x,P,N,C,Thigh,q):
     if tmp < score:
       score = tmp
       V = copy.deepcopy(v)
-    print tmp
+    
+    print "jfcm=" +str(tmp)
     
     if distance(v,vdash) < e1:
       # 同一温度で収束した場合
