@@ -182,6 +182,13 @@ def fcm(x,P,N,C,Thigh,q):
 		  
 		# --- 収束チェック ---
 		
+    # 最適解を更新する
+    tmp = jfcm(u,x,v,q)
+    if tmp < score:
+      score = tmp
+      V = copy.deepcopy(v)
+    
+    
     if distance(v,vdash) < e1:
       # 同一温度で収束した場合
       
@@ -196,12 +203,6 @@ def fcm(x,P,N,C,Thigh,q):
       # Vdashを更新する
       Vdash = copy.deepcopy(V)
       
-    # 最適解を更新する
-    tmp = jfcm(u,x,v,q)
-    if tmp < score:
-      score = tmp
-      V = copy.deepcopy(v)
-    
     # vdashを更新してループする
     vdash = copy.deepcopy(v)
     
