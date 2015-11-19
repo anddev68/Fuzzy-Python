@@ -204,7 +204,7 @@ def fcm(x,P,N,C,Thigh,q):
       
       # 同一温度内収束チェック
       # 収束した場合は温度を変更する
-      if vdash is not None && distance(v,vdash) < e1:
+      if vdash is not None and distance(v,vdash) < e1:
         break
       
       # vdashの更新
@@ -224,7 +224,7 @@ def fcm(x,P,N,C,Thigh,q):
     
     # 最適解の収束判定
     # 収束した場合はクラスタリングを終了する
-    if Vdash is not None && distance(V,Vdash) < e2:
+    if Vdash is not None and distance(V,Vdash) < e2:
       break  
     
     # Vdashの更新
