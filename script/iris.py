@@ -29,8 +29,8 @@ def main():
   C = 3	# v length
   N = 150	# x length
   P = 4	# Demention
-  Thigh = 20
-  q = 2.0
+  Thigh = 2.0
+  q = 8.0
 
 
   # fcmで求める 
