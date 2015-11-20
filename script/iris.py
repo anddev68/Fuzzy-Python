@@ -227,7 +227,7 @@ def fcm(x,P,N,C,Thigh,q):
     print "T=" + str(T)
 
     # 各温度での最適解を表示
-    # print "V=" + str(V)
+    print "V=" + str(V)
     
     
     # 最適解の収束判定
