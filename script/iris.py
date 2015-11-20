@@ -15,6 +15,12 @@ import sys
 import copy
 
 
+# v[i]の初期化時における乱数の下限値と上限値
+RAND_MIN = 10000000000
+RAND_MAX = -10000000000
+
+
+
 def main():
 
   # Irisのデータを読み込む
@@ -51,6 +57,9 @@ def main():
 
   #	ループ回数の表示
   print "loop=" + str(loop)
+
+
+
 
 
 
@@ -160,10 +169,14 @@ def fcm(x,P,N,C,Thigh,q):
 
   e1 = 0.01
   e2 = 0.01
-
+  
   # クラスタ中心を初期化する
+  # RAND_MINからRAND_MAXの間の値を取ることとする
   v = np.array( [ np.random.rand(P) for i in range(C) ]) 
-  v *= 10
+  v *= ( RAND_MAX - RAND_MIN )  
+  v += RAND_MIN
+  
+  
   
   # 帰属度関数を初期化する
   u = np.zeros([C,N])
