@@ -223,7 +223,7 @@ def fcm(x,P,N,C,Thigh,q):
     T = Thigh * math.exp (-2.0*update_temperature**(1.0/P))
 
     # 各温度での最適解を表示
-    print "V=" + str(V)
+    # print "V=" + str(V)
     
     
     # 最適解の収束判定
