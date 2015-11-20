@@ -221,6 +221,10 @@ def fcm(x,P,N,C,Thigh,q):
     # 温度を更新する
     update_temperature += 1
     T = Thigh * math.exp (-2.0*update_temperature**(1.0/P))
+
+    # 各温度での最適解を表示
+    print "V=" + str(V)
+    
     
     # 最適解の収束判定
     # 収束した場合はクラスタリングを終了する
@@ -246,8 +250,6 @@ def fcm(x,P,N,C,Thigh,q):
 	  else:
 		  predict[k] = 1
 		  
-  print "temperature="
-  print update_temperature
 
   return [predict,total_loop]
   
