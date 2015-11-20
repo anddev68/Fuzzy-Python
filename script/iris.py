@@ -109,7 +109,7 @@ def calcU(u,v,x,q,beta):
 #
 # クラスタ中心を計算する
 #
-def calcV(u,v,x,q,beta):
+def calcV(u,v,x,q,beta,P):
   #	--- Cal v[i] ---
   # ここの部分はデバッグ済み。触らない。
   for i in range(len(v)):
@@ -200,7 +200,7 @@ def fcm(x,P,N,C,Thigh,q):
       calcU(u,v,x,q,beta)
       
       # クラスタ中心を計算する
-      calcV(u,v,x,q,beta)
+      calcV(u,v,x,q,beta,P)
       
       # 同一温度内収束チェック
       # 収束した場合は温度を変更する
