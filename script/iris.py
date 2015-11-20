@@ -248,15 +248,15 @@ def fcm(x,P,N,C,Thigh,q):
   predict = np.array( [ np.argmax(u[:,k]) for k in range(N) ] )
 
   # ラベルの再割り振り
-  first = predict[0]
-  last = predict[N-1]
-  for k in range(N):
-	  if predict[k] == first:
-		  predict[k] = 0
-	  elif predict[k] == last:
-		  predict[k] = 2
-	  else:
-		  predict[k] = 1
+  #first = predict[0]
+  #last = predict[N-1]
+  #for k in range(N):
+	#  if predict[k] == first:
+	#	  predict[k] = 0
+	#  elif predict[k] == last:
+	#	  predict[k] = 2
+	#  else:
+	#	  predict[k] = 1
 		  
 
   return [predict,total_loop]
