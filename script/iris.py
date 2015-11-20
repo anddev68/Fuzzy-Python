@@ -246,7 +246,7 @@ def fcm(x,P,N,C,Thigh,q):
 	  else:
 		  predict[k] = 1	
 
-  return [predict,loop]
+  return [predict,total_loop]
   
   
 
