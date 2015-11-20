@@ -163,10 +163,11 @@ def fcm(x,P,N,C,Thigh,q):
 
   # クラスタ中心を初期化する
   v = np.array( [ np.random.rand(P) for i in range(C) ]) 
+  v *= 10
   
   # 帰属度関数を初期化する
   u = np.zeros([C,N])
-  u *= 10
+  
   
   # 初期温度はThigh
   T = Thigh
