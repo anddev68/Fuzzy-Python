@@ -217,6 +217,8 @@ def fcm(x,P,N,C,Thigh,q):
         score = tmp
         V = copy.deepcopy(v)
         
+      print "v=" + str(v)
+        
     # loop end
     
     # 温度を表示
@@ -230,8 +232,6 @@ def fcm(x,P,N,C,Thigh,q):
     # 温度を更新する
     update_temperature += 1
     T = Thigh * math.exp (-2.0*update_temperature**(1.0/P))
-    
-    
     
     
     # 最適解の収束判定
