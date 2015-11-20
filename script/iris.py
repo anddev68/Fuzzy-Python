@@ -244,7 +244,10 @@ def fcm(x,P,N,C,Thigh,q):
 	  elif predict[k] == last:
 		  predict[k] = 2
 	  else:
-		  predict[k] = 1	
+		  predict[k] = 1
+		  
+  print "temperature="
+  print update_temperature
 
   return [predict,total_loop]
   
