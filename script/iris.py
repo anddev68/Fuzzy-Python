@@ -109,7 +109,7 @@ def calcU(u,v,x,q,beta):
 #
 # クラスタ中心を計算する
 #
-def calcC(u,v,x,q,beta):
+def calcV(u,v,x,q,beta):
   #	--- Cal v[i] ---
   # ここの部分はデバッグ済み。触らない。
   for i in range(len(v)):
