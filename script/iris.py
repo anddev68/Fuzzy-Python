@@ -16,9 +16,8 @@ import copy
 
 
 # v[i]の初期化時における乱数の下限値と上限値
-RAND_MIN = 10000000000
-RAND_MAX = -10000000000
-
+RAND_MIN = -10000000000
+RAND_MAX = 10000000000
 
 
 def main():
@@ -176,7 +175,7 @@ def fcm(x,P,N,C,Thigh,q):
   v *= ( RAND_MAX - RAND_MIN )  
   v += RAND_MIN
   
-  
+  print "init v = " + str(v)  
   
   # 帰属度関数を初期化する
   u = np.zeros([C,N])
