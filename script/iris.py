@@ -219,16 +219,19 @@ def fcm(x,P,N,C,Thigh,q):
         
     # loop end
     
-    # 温度を更新する
-    update_temperature += 1
-    T = Thigh * math.exp (-2.0*update_temperature**(1.0/P))
-    
     # 温度を表示
     print "T=" + str(T)
 
     # 各温度での最適解を表示
     print "score=" + str(score)
     print "V=" + str(V)
+    
+    
+    # 温度を更新する
+    update_temperature += 1
+    T = Thigh * math.exp (-2.0*update_temperature**(1.0/P))
+    
+    
     
     
     # 最適解の収束判定
