@@ -159,7 +159,7 @@ def calcV(u,v,x,q,beta,P):
 def fcm(x,P,N,C,Thigh,q):
 
   e1 = 0.01
-  e2 = 0.00001
+  e2 = 0.01
 
   # クラスタ中心を初期化する
   v = np.array( [ np.random.rand(P) for i in range(C) ]) 
@@ -221,6 +221,9 @@ def fcm(x,P,N,C,Thigh,q):
     # 温度を更新する
     update_temperature += 1
     T = Thigh * math.exp (-2.0*update_temperature**(1.0/P))
+    
+    # 温度を表示
+    print "T=" + str(T)
 
     # 各温度での最適解を表示
     # print "V=" + str(V)
