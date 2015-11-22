@@ -1,9 +1,9 @@
 # coding: UTF-8
-#	
-#	--- Iris.py ---
-# Irisのデータを用いてtsaliisエントロピー正則化FCM法を試す
-#
 
+# -- iris2.py --
+# 11.21 updated.
+# 二次元配列が縦横逆になっていたのを修正しました。
+# calc_uikとcalc_viの修正を行いました。
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,54 +14,49 @@ import math
 import sys
 import copy
 
+# 定数宣言
+E1 = 0.01
+E2 = 0.01
+RAND_MIN = 1
+RAND_MAX = 8
+C = 3 # クラスタ中心の数
+N = 150 # データ個数
+P = 3 # データ次元
+Cd = 2.0 # VFAの定数
+Thigh = 2.0
+q  = 2.0
 
-# v[i]の初期化時における乱数の下限値と上限値
-RAND_MIN = -10000000000
-RAND_MAX = 10000000000
 
-
+# ここからメイン
 def main():
-
+	
   # Irisのデータを読み込む
+  # x.shape => (150,4)
+  # 4項目の150個 
   iris = ds.load_iris() # Irisのデータをロードする
-  data = iris.data  # Irisの4次元データ(150個)
-  target = iris.target  # 正解 [0,0,0,1....
+  x = iris.data  # Irisの4次元データ(150個)
+  target = iris.target  # 正解データ [0,0,0,1....  
   
-  # 標準偏差を表示する
-  # print "std="+str(np.std(x))
-
-  #	各種パラメータの設定
-  C = 3	# v length
-  N = 150	# x length
-  P = 4	# Demention
-  Thigh = 2.0
-  q = 8.0
-
-
-  # fcmで求める 
-  result = fcm(data,P,N,C,Thigh,q)
+  #	fcmを適用する
+  result = fcm(x,C,Thigh,q)
   predict = result[0]
-  loop = result[1]
+  loop = result[1]  
 
-  # 正解とpredictを表示
+  # 結果を表示する
   print "target="
-  np.savetxt(sys.stdout,target[None],fmt='%.0f',delimiter=' ')
-
+  np.savetxt(sys.stdout,target[None],fmt="%.0f",delimiter=" ")
   print "predict="
-  np.savetxt(sys.stdout,predict[None],fmt='%.0f',delimiter=' ')
+  np.savetxt(sys.stdout,predict[None],fmt="%.0f",delimiter=" ")
 
-  #	正答率を表示
+  # 正解率の表示
   score = accuracy_score(target,predict)
   print str(score*100) + "% (" + str(score*N) + "/" + str(N) + ")"
 
-  #	ループ回数の表示
-  print "loop=" + str(loop)
-
-
-
-
-
-
+  # ループ回数の表示
+  print "loop=" + str(loop) 
+ 
+ 
+  
 #
 # 収束判定のための移動度を求める関数
 # デバッグ終了
@@ -71,73 +66,83 @@ def main():
 #
 def distance(v1,v2):
   max = 0.0
-  for i in range(len(v1)):
+  for i in range(v1.shape[0]):
     score = np.linalg.norm(v1[i]-v2[i])
     if max < score:
       max = score
   return max
 
-#
-# 目的関数Jfcm
-# この関数を最小化するのが目的
-# @param u
-# @param x
-# @param v
-# @param q
-# @return objective function
-#
-def jfcm(u,x,v,q):
-	score = 0.0
-	for k in range(len(x)):
-		for i in range(len(v)):
-			dik = np.linalg.norm(v[i]-x[k])
-			score += (u[i][k] ** q) * dik  	
-	return score
+
+
+        
+
 
 #
 # 帰属度関数を計算する
-# @param u
-# @param v
-# @param x
-# @param q
-# @param beta
+# @param ref u
+#   uの参照はそのままで値だけ更新する
+# @param const v
+# @param const x
+# @param const q
+# @param const T
 #
-def calcU(u,v,x,q,beta):
-  #	--- Cal u[i][k] ---
-  # ここの部分はデバッグ済み。触らない。
-  for k in range(len(x)):
-    denominator = 0.0
-    for j in range(len(v)):
-      djk = np.linalg.norm(v[j]-x[k])
-      denominator += (1.0-beta*(1.0-q)*djk)**(1.0/(1.0-q))
-    for i in range(len(v)):
-      dik = np.linalg.norm(v[i]-x[k])
-      u[i][k] = (1.0-beta*(1.0-q)*dik)**(1.0/(1.0-q)) / denominator
+def calc_uik(u,v,x,q,T):
+  # データ個数
+  N = x.shape[0]
+  # クラスタ個数
+  C = v.shape[0]
+  # 次元数
+  P = x.shape[1]
+
+  for i in range(C):
+    for j in range(N):
+      # uik =uijの計算  
+      #dik2 = np.linalg.norm( x[j,:] - v[i,:] )
+      # 距離dikの計算を行う
+      dik = 0.0
+      for l in range(P):
+        dik += math.pow(x[j,l]-v[i,l],2)
+      # 分子を作成
+      numerator = ( 1.0-(1.0/T)*(1-q)*dik ) ** (1.0/(1.0-q)) 
+      # 分母の計算を行う
+      denominator =  0.0
+      for k in range(C):      
+        # djkの計算を行う
+        djk = 0.0
+        for l in range(P):
+          djk += math.pow(x[j][l]-v[k][l],2)
+        denominator += ( 1.0-(1.0/T)*(1.0-q)*djk ) ** (1.0/1.0-q)
+      # 分子/分母をuとする
+      u[j,i] = numerator / denominator
+
+  #print u
+  #print v
+  #sys.exit()      
+
 
 #
 # クラスタ中心を計算する
-#
-def calcV(u,v,x,q,beta,P):
-  #	--- Cal v[i] ---
-  # ここの部分はデバッグ済み。触らない。
-  for i in range(len(v)):
+# @param ref u
+# @param ref v
+# @param ref x
+# @param const q
+def calc_vi(u,v,x,q):
+  
+  # データ個数
+  N = x.shape[0]
+  # クラスタ個数
+  C = v.shape[0]
+  # 次元数
+  P = x.shape[1]
+  # P = v.shape[1] #同じになるはず 
+  # vを計算
+  for i in range(C):
+    for l in range(P):
+      uikm = sum( [ u[j,i] ** q for j in range(N) ] )
+      uikmxk = sum( [ u[j,i] ** q * x[j,l]  for j in range(N) ])
+      v[i,l] = uikmxk / uikm 
+ 
     
-    #	cal denominator
-    denominator = 0.0
-    for k in range(len(x)):
-      denominator += u[i][k]**q
-    
-    #	cal numerator
-    numerator = np.zeros(P)
-    for k in range(len(x)):
-      numerator += (u[i][k] ** q)*x[k]
-    
-    #	cal v
-    num = numerator / denominator
-    v[i] = num
-
-
-
 #
 # fuzzy_clustring_method
 # ファジィクラスタリングを実行する
@@ -155,8 +160,6 @@ def calcV(u,v,x,q,beta,P):
 # 6.[predict,loop]を返す
 #
 # @param x データ集合
-# @param P データの次元数
-# @param N データ集合の個数
 # @param C クラスタ中心の数
 # @param Thigh 初期温度
 # @param q q値
@@ -164,118 +167,87 @@ def calcV(u,v,x,q,beta,P):
 #   loop:ループ回数
 #   predict:クラスタリング結果
 #
-def fcm(x,P,N,C,Thigh,q):
+def fcm(x,C,Thigh,q):
 
-  e1 = 0.01
-  e2 = 0.01
-  
   # クラスタ中心を初期化する
   # RAND_MINからRAND_MAXの間の値を取ることとする
-  v = np.array( [ np.random.rand(P) for i in range(C) ]) 
-  v *= ( RAND_MAX - RAND_MIN )  
-  v += RAND_MIN
-  
-  print "init v = " + str(v)  
-  
+  # v.shape => (3,4)
+  # 4次元の3個
+  v = np.random.rand(C,x.shape[1]) * ( RAND_MAX - RAND_MIN ) + RAND_MIN
+  #print "init v = " + str(v)  
   # 帰属度関数を初期化する
-  u = np.zeros([C,N])
-  
-  
+  # u.shape => (150,3)
+  # xに対してのV
+  u = np.zeros( (x.shape[0],C) )
   # 初期温度はThigh
   T = Thigh
+  # ループカウント
+  loop_count = 0
+  # 温度の更新回数
+  temperature_update_count = 0
   
-  # ループ開始
-  total_loop = 0 # 総ループ回数
-  update_temperature = 0  # 温度の更新回数
-  Vdash = None  # 最適解
-
-  while True: # 別の温度で試す
-     
-    # vdashのnullクリア
-    vdash = None
-    
-    # 最適解のクリア
-    score = float("inf")
-    V = None
-    
-    #
-    # 同一温度内ループ 
-    # 同一温度内で解が収束するまで行う
-    #
-    while True: # 同一温度内でループ
-      # ループ回数の更新
-      total_loop += 1
-      
-      # betaはTの逆数
-      beta = 1.0/T
-      
-      # 帰属度関数を計算する
-      calcU(u,v,x,q,beta)
-      
-      # クラスタ中心を計算する
-      calcV(u,v,x,q,beta,P)
-      
-      # 同一温度内収束チェック
-      # 収束した場合は温度を変更する
-      if vdash is not None and distance(v,vdash) < e1:
+  # ループ
+  while True:
+    # 外ループのviのバックアップ
+    copied_Vi = copy.deepcopy(v)
+    # 内ループ
+    while True:
+      # 内ループのviのバックアップ
+      copied_vi = copy.deepcopy(v)
+      # uikを計算する
+      calc_uik(u,v,x,q,T)
+      # print u
+      # viを計算する
+      calc_vi(u,v,x,q)
+      # ループカウントをインクリメントする
+      loop_count += 1
+      # debug
+      print "loop=" + str(loop_count) + " T=" + str(T)
+      print v
+      #if loop_count == 5:
+      #  sys.exit()   
+      #print "v=" + str(v)
+      #print "u=" + str(u[0:150,:])
+      # 収束チェック  
+      if distance(v,copied_vi) < E1:
         break
-      
-      # vdashの更新
-      vdash = copy.deepcopy(v)
-      
-      # 最適解を更新する
-      tmp = jfcm(u,x,v,q)
-      if tmp < score:
-        score = tmp
-        V = copy.deepcopy(v)
-        
-      print "v=" + str(v)
-        
-    # loop end
-    
-    # 温度を表示
-    print "T=" + str(T)
-
-    # 各温度での最適解を表示
-    print "score=" + str(score)
-    print "V=" + str(V)
-    
-    
-    # 温度を更新する
-    update_temperature += 1
-    T = Thigh * math.exp (-2.0*update_temperature**(1.0/P))
-    
-    
-    # 最適解の収束判定
-    # 収束した場合はクラスタリングを終了する
-    if Vdash is not None and distance(V,Vdash) < e2:
-      break  
-    
-    # Vdashの更新
-    Vdash = copy.deepcopy(V)
+    # 収束チェック
+    if distance(v,copied_Vi) < E2:
+      break
+    # 温度更新
+    temperature_update_count +=1
+    # 超高速アニーリング
+    T = Thigh * math.exp(-2.0*temperature_update_count**(1.0/x.shape[1]))
     
   # loop end
+  #print v
 
   # クラスタリング結果を取得
-  predict = np.array( [ np.argmax(u[:,k]) for k in range(N) ] )
+  #for k in range(x.shape[0]):
+  #  print np.argmax(u[k,:])
+
+  predict = np.array( [ np.argmax(u[k,:]) for k in range(x.shape[0]) ] )
+  # print predict
+  # print loop_count
 
   # ラベルの再割り振り
-  #first = predict[0]
-  #last = predict[N-1]
-  #for k in range(N):
-	#  if predict[k] == first:
-	#	  predict[k] = 0
-	#  elif predict[k] == last:
-	#	  predict[k] = 2
-	#  else:
-	#	  predict[k] = 1
+  first = predict[0]
+  last = predict[N-1]
+  for k in range(N):
+    if predict[k] == first:
+      predict[k] = 0
+    elif predict[k] == last:
+      predict[k] = 1
+    else:
+      predict[k] = 2
 		  
 
-  return [predict,total_loop]
+  return [predict,loop_count]
   
-  
+
+
+
 
 
 # ---
 main()
-
